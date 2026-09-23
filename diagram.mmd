@@ -1,2 +1,27 @@
-<!-- Save your AI-generated Mermaid flowchart source here (Tinker 3B, Part 4). -->
-<!-- Replace this comment with a fenced ```mermaid``` code block: input -> process/score -> output. -->
+```mermaid
+flowchart LR
+    subgraph Input
+        CSV[("data/study_spots.csv")]
+        UI["Find a Study Spot tab<br/>max_noise, max_distance, min_seats"]
+    end
+
+    subgraph Process
+        LOAD["load_study_spots()<br/>DictReader; distance to float, seats to int"]
+        PROFILE["profile dict"]
+        SCORE["score_study_spot() for each spot<br/>noise +2 or -2 per level over<br/>distance +2 / -2<br/>seats +1 / -1<br/>wifi +0.5 / +0.25 / 0"]
+        RANK["rank_study_spots()<br/>sort by score, then closest first<br/>keep top k = 3"]
+    end
+
+    subgraph Output
+        APP["Streamlit tab: name, score, reasons"]
+        CLI["format_results(): printed lines"]
+    end
+
+    CSV --> LOAD
+    UI --> PROFILE
+    LOAD -- "list of spot dicts" --> SCORE
+    PROFILE --> SCORE
+    SCORE -- "(spot, score, reasons)" --> RANK
+    RANK --> APP
+    RANK --> CLI
+```
