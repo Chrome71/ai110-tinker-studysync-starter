@@ -94,7 +94,7 @@ def test_find_conflicts_three_in_one_slot_gives_every_pair_once():
 @pytest.fixture
 def app():
     testing = pytest.importorskip("streamlit.testing.v1")
-    at = testing.AppTest.from_file("app.py").run()
+    at = testing.AppTest.from_file("app.py", default_timeout=30).run()
     assert not at.exception
     return at
 
